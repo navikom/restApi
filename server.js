@@ -26,7 +26,7 @@ const express = require("express"),
   fs = require('fs'),
   color = require('colors'),
   extras = require('express-extras'),
-  api = require('./api.js'),
+  api = require('./api'),
   util = require('util'),
   bodyParser = require('body-parser');
 
@@ -82,28 +82,27 @@ require("fs").readdirSync(modelPath).forEach((file) => {
 });
 swagger.addModels(models);
 
-
 // Add methods to swagger
 swagger
-  .addGet(api.getAllCarriers)
-  .addGet(api.getAllManufacturers)
-  .addGet(api.getAllPhones)
-  .addGet(api.getCarrierById)
-  .addGet(api.getManufacturerById)
-  .addGet(api.getPhoneById)
+  .addGet(api.Carrier.getAllCarriers)
+  .addGet(api.Manufacture.getAllManufacturers)
+  .addGet(api.Phone.getAllPhones)
+  .addGet(api.Carrier.getCarrierById)
+  .addGet(api.Manufacture.getManufacturerById)
+  .addGet(api.Phone.getPhoneById)
 
-  .addPost(api.addCarrier)
-  .addPost(api.addManufacturer)
-  .addPost(api.addPhone)
-  .addPost(api.addPhones)
+  .addPost(api.Carrier.addCarrier)
+  .addPost(api.Manufacture.addManufacturer)
+  .addPost(api.Phone.addPhone)
+  .addPost(api.Phone.addPhones)
 
-  .addPut(api.updateCarrier)
-  .addPut(api.updateManufacturer)
-  .addPut(api.updatePhone)
+  .addPut(api.Carrier.updateCarrier)
+  .addPut(api.Manufacture.updateManufacturer)
+  .addPut(api.Phone.updatePhone)
 
-  .addDelete(api.deleteCarrier)
-  .addDelete(api.deleteManufacturer)
-  .addDelete(api.deletePhone)
+  .addDelete(api.Carrier.deleteCarrier)
+  .addDelete(api.Manufacture.deleteManufacturer)
+  .addDelete(api.Phone.deletePhone)
 
 /*swagger.configureDeclaration("carrier", {
 	description : "Operations about phone carriers",
