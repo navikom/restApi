@@ -1,0 +1,103 @@
+[
+  {
+    "name": "iPhone 5S",
+    "status": "available",
+    "manufacturer": "5b3df91525aeee10b48ab1d2",
+    "carriers": [
+      "5b3df8c625aeee10b48ab1ce",
+      "5b3df8db25aeee10b48ab1cf",
+      "5b3df8e925aeee10b48ab1d0",
+      "5b3df8f625aeee10b48ab1d1"
+    ]
+  },
+  {
+    "name": "iPhone 5C",
+    "status": "available",
+    "manufacturer": "5b3df91525aeee10b48ab1d2",
+    "carriers": [
+      "5b3df8c625aeee10b48ab1ce",
+      "5b3df8db25aeee10b48ab1cf",
+      "5b3df8e925aeee10b48ab1d0",
+      "5b3df8f625aeee10b48ab1d1"
+    ]
+  },
+  {
+    "name": "iPhone 5",
+    "status": "available",
+    "manufacturer": "5b3df91525aeee10b48ab1d2",
+    "carriers": [
+      "5b3df8c625aeee10b48ab1ce",
+      "5b3df8db25aeee10b48ab1cf",
+      "5b3df8e925aeee10b48ab1d0",
+      "5b3df8f625aeee10b48ab1d1"
+    ]
+  },
+  {
+    "name": "Galaxy S4",
+    "status": "available",
+    "manufacturer": "5b3df94025aeee10b48ab1d7",
+    "carriers": [
+      "5b3df8c625aeee10b48ab1ce",
+      "5b3df8db25aeee10b48ab1cf",
+      "5b3df8e925aeee10b48ab1d0",
+      "5b3df8f625aeee10b48ab1d1"
+    ]
+  },
+  {
+    "name": "Galaxy Note 3",
+    "status": "available",
+    "manufacturer":  "5b3df94025aeee10b48ab1d7",
+    "carriers": [
+      "5b3df8c625aeee10b48ab1ce",
+      "5b3df8db25aeee10b48ab1cf",
+      "5b3df8e925aeee10b48ab1d0",
+      "5b3df8f625aeee10b48ab1d1"
+    ]
+  },
+  {
+    "name": "One",
+    "status": "available",
+    "manufacturer": "5b3df92225aeee10b48ab1d3",
+    "carriers": [
+      "5b3df8c625aeee10b48ab1ce",
+      "5b3df8db25aeee10b48ab1cf",
+      "5b3df8e925aeee10b48ab1d0",
+      "5b3df8f625aeee10b48ab1d1"
+    ]
+  },
+  {
+    "name": "Q10",
+    "status": "available",
+    "manufacturer": "5b3df92825aeee10b48ab1d4",
+    "carriers": ["5b3df8c625aeee10b48ab1ce"]
+  },
+  {
+    "_id": "52cce4d4e4b012c8a1bdea84",
+    "name": "Moto X",
+    "status": "available",
+    "manufacturer": "5b3df93525aeee10b48ab1d5",
+    "carriers": [
+      "5b3df8c625aeee10b48ab1ce",
+      "5b3df8db25aeee10b48ab1cf",
+      "5b3df8e925aeee10b48ab1d0",
+      "5b3df8f625aeee10b48ab1d1"
+    ]
+  },
+  {
+    "name": "Lumia 928",
+    "status": "available",
+    "manufacturer": "5b3df93a25aeee10b48ab1d6",
+    "carriers": ["5b3df8f625aeee10b48ab1d1"]
+  },
+  {
+    "name": "G2",
+    "status": "available",
+    "manufacturer": "5b3df92825aeee10b48ab1d4",
+    "carriers": [
+      "5b3df8c625aeee10b48ab1ce",
+      "5b3df8db25aeee10b48ab1cf",
+      "5b3df8e925aeee10b48ab1d0",
+      "5b3df8f625aeee10b48ab1d1"
+    ]
+  }
+]
