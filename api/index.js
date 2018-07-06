@@ -20,6 +20,7 @@ db.on('reconnected', function() {
 
 mongoose.connect(config.db_url, {server: {auto_reconnect: true}, useNewUrlParser: true});
 
+
 module.exports = {
   Carrier: require('./controllers/carrier'),
   Manufacture: require('./controllers/manufacturer'),
