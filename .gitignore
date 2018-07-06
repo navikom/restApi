@@ -4,7 +4,12 @@
 .DS_Store
 .AppleDouble
 .LSOverride
-.idea/*
+
+# IntelliJ project files
+*.iml
+*.iws
+*.ipr
+.idea/
 
 # Icon must ends with two \r.
 Icon
