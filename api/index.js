@@ -2,7 +2,7 @@
  * All API methods and database connection info
  */
 const mongoose = require('mongoose'),
-  config = require('../config'),
+  CONFIG = require('../config/config'),
   db = mongoose.connection;
 
 db.on('error', function() {
@@ -18,8 +18,9 @@ db.on('reconnected', function() {
   console.log('Database reconnected'.green);
 });
 
-mongoose.connect(config.db_url, {server: {auto_reconnect: true}, useNewUrlParser: true});
-
+const mongoLocation = `mongodb://${CONFIG.db_host}:${CONFIG.db_port}/${CONFIG.db_name}`;
+mongoose
+  .connect(mongoLocation, {server: {auto_reconnect: true}, useNewUrlParser: true});
 
 module.exports = {
   Carrier: require('./controllers/carrier'),
