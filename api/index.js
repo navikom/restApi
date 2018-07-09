@@ -25,5 +25,7 @@ mongoose
 module.exports = {
   Carrier: require('./controllers/carrier.controller'),
   Manufacture: require('./controllers/manufacturer.controller'),
-  Phone: require('./controllers/phone.controller')
+  Phone: require('./controllers/phone.controller'),
+  User: require('./controllers/user.controller'),
+  Dashboard: require('./controllers/dashboard.controller')
 };

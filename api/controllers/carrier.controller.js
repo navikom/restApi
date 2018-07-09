@@ -1,5 +1,5 @@
-const sw = require('swagger-node-express'),
-  swe = sw.errors;
+const sw = require('swagger-node-express');
+const swe = sw.errors;
 const Carrier = require('../../models/carrier.model.js');
 
 /**
@@ -17,7 +17,7 @@ exports.getAllCarriers = {
     type: "CarrierController",
     nickname: "getAllCarriers",
     produces: ["application/json"],
-    parameters: [sw.headerParam("auth", "An authorization header", "string")],
+    parameters: [],
     responseMessages: [swe.invalid('carriers'), swe.notFound('carriers')]
   },
   'action': async (req, res) => {
@@ -80,7 +80,7 @@ exports.addCarrier = {
   },
   'action': async (req, res) => {
     try {
-      const carrier = await Carrier.model.create({name: req.body.name});
+      const carrier = await Carrier.model.create({ name: req.body.name });
       res.send(carrier);
     } catch (e) {
       res.status(400).send(e);
@@ -112,7 +112,7 @@ exports.updateCarrier = {
   },
   'action': async (req, res) => {
     try {
-      const numRowsAffected = await Carrier.model.update({_id: req.params.id}, {name: req.body.name}, {runValidators: true});
+      const numRowsAffected = await Carrier.model.update({ _id: req.params.id }, { name: req.body.name }, { runValidators: true });
       res.send(numRowsAffected);
     } catch (e) {
       res.status(500).send(e);
@@ -133,11 +133,11 @@ exports.deleteCarrier = {
   },
   'action': async (req, res) => {
     try {
-      const result = await Carrier.model.remove({_id: req.params.carrierId});
-      if(!result.n) {
+      const result = await Carrier.model.remove({ _id: req.params.carrierId });
+      if (!result.n) {
         throw swe.notFound('carrier');
       }
-      res.status(200).send({'msg': 'ok'});
+      res.status(200).send({ 'msg': 'ok' });
     } catch (e) {
       res.status(e.code || 400).send(e)
     }

@@ -1,11 +1,11 @@
 /**
 * The schema and model for carrier data
 */
-const mongoose = require('mongoose'),
-	Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const	Schema = mongoose.Schema;
 
-const manufacturerSchema = new Schema({
+const ManufacturerSchema = new Schema({
 	name: {type: String, required: true}
 });
 
-exports.model = mongoose.model('manufacturers', manufacturerSchema);
+exports.model = mongoose.model('manufacturers', ManufacturerSchema);

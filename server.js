@@ -20,36 +20,39 @@
  * @beta
  */
 
+require('dotenv').config();
 
-const express = require("express"),
-  url = require("url"),
-  fs = require('fs'),
-  color = require('colors'),
-  logger = require('morgan'),
-  extras = require('express-extras'),
-  api = require('./api'),
-  util = require('util'),
-  bodyParser = require('body-parser');
+const express = require("express");
+const url = require("url");
+const fs = require('fs');
+const color = require('colors');
+const logger = require('morgan');
+const extras = require('express-extras');
+const api = require('./api');
+const util = require('util');
+const bodyParser = require('body-parser');
+const passport = require('passport');
+const CONFIG = require('./config/config');
 
-const app = express(),
-  swagger = require('swagger-node-express').createNew(app);
+const app = express();
+const swagger = require('swagger-node-express').createNew(app);
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(passport.initialize());
+
+const { passportStrategy, passportForRoute } = require('./middleware/passport');
+passportStrategy(passport);
+const passportSupplier = passportForRoute(passport);
 
 // Setup throttling to keep users from abusing the API
 app.use(extras.throttle({
   urlCount: 100,
   urlSec: 1,
   holdTime: 10
-  // whitelist: {
-  // 	'127.0.0.1': true
-  // }
 }));
-
-// Set the main handler in swagger to the express app
-// swagger.setAppHandler(app);
 
 // This is a sample validator.  It simply says that for _all_ POST, DELETE, PUT
 // methods, the header `api_key` OR query param `api_key` must be equal
@@ -62,7 +65,7 @@ swagger.addValidator(
       if (!apiKey) {
         apiKey = url.parse(req.url, true).query["api_key"];
       }
-      if ("1234" == apiKey) {
+      if (CONFIG.api_key == apiKey) {
         return true;
       }
       return false;
@@ -73,7 +76,7 @@ swagger.addValidator(
 
 // Find all of the model files in the 'models' folder and add the their definitions to swagger
 // so it can be displayed in the docs
-const models = {"models": {}},
+const models = { "models": {} },
   modelPath = 'models';
 require("fs").readdirSync(modelPath).forEach((file) => {
   console.log('Load models from - ' + file);
@@ -92,11 +95,14 @@ swagger
   .addGet(api.Carrier.getCarrierById)
   .addGet(api.Manufacture.getManufacturerById)
   .addGet(api.Phone.getPhoneById)
+  .addGet(passportSupplier(api.Dashboard.dashboard))
 
   .addPost(api.Carrier.addCarrier)
   .addPost(api.Manufacture.addManufacturer)
   .addPost(api.Phone.addPhone)
   .addPost(api.Phone.addPhones)
+  .addPost(api.User.create)
+  .addPost(api.User.login)
 
   .addPut(api.Carrier.updateCarrier)
   .addPut(api.Manufacture.updateManufacturer)
@@ -104,19 +110,7 @@ swagger
 
   .addDelete(api.Carrier.deleteCarrier)
   .addDelete(api.Manufacture.deleteManufacturer)
-  .addDelete(api.Phone.deletePhone)
-
-/*swagger.configureDeclaration("carrier", {
-	description : "Operations about phone carriers",
-	authorizations : ["oauth2"],
-	produces: ["application/json"]
-});
-
-swagger.configureDeclaration("manufacturer", {
-	description : "Operations about phone manufacturers",
-	authorizations : ["oauth2"],
-	produces: ["application/json"]
-});*/
+  .addDelete(api.Phone.deletePhone);
 
 // set api info
 swagger.setApiInfo({
@@ -134,13 +128,13 @@ swagger.setAuthorizations({
 
 // Configures the app's base path and api version.
 swagger.configureSwaggerPaths("", "api-docs", "")
-swagger.configure("http://localhost:8005", "1.0.0");
+swagger.configure(`http://localhost:${CONFIG.port}`, "1.0.0");
 
 // Serve up swagger ui at /docs via static route
 const docs_handler = express.static(__dirname + '/swagger-ui/');
 app.get(/^\/docs(\/.*)?$/, (req, res, next) => {
   if (req.url === '/docs') { // express static barfs on root url w/o trailing slash
-    res.writeHead(302, {'Location': req.url + '/'});
+    res.writeHead(302, { 'Location': req.url + '/' });
     res.end();
     return;
   }
@@ -149,5 +143,6 @@ app.get(/^\/docs(\/.*)?$/, (req, res, next) => {
   return docs_handler(req, res, next);
 });
 
+
 // Start the server on port 8002
-app.listen(8005);
+app.listen(CONFIG.port);
