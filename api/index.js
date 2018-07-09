@@ -23,7 +23,7 @@ mongoose
   .connect(mongoLocation, {server: {auto_reconnect: true}, useNewUrlParser: true});
 
 module.exports = {
-  Carrier: require('./controllers/carrier'),
-  Manufacture: require('./controllers/manufacturer'),
-  Phone: require('./controllers/phone')
+  Carrier: require('./controllers/carrier.controller'),
+  Manufacture: require('./controllers/manufacturer.controller'),
+  Phone: require('./controllers/phone.controller')
 };

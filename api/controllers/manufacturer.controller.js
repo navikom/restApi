@@ -1,6 +1,6 @@
 const sw = require('swagger-node-express'),
   swe = sw.errors;
-const Manufacturer = require('../../models/manufacturer.js');
+const Manufacturer = require('../../models/manufacturer.model.js');
 
 exports.getAllManufacturers = {
   'spec': {
@@ -9,7 +9,7 @@ exports.getAllManufacturers = {
     method: "GET",
     summary: "List all phone manufacturers",
     notes: "Returns a list of all phone manufacturers",
-    type: "Manufacturer",
+    type: "ManufacturerController",
     nickname: "getAllManufacturers",
     produces: ["application/json"],
     parameters: [],
@@ -32,7 +32,7 @@ exports.getManufacturerById = {
     method: "GET",
     summary: "Find manufacturer by ID",
     notes: "Returns a manufacturer based on ID",
-    type: "Manufacturer",
+    type: "ManufacturerController",
     nickname: "getManufacturerById",
     produces: ["application/json"],
     parameters: [sw.pathParam("manufId", "ID of the manufacturer to return", "string")],
@@ -54,12 +54,12 @@ exports.addManufacturer = {
     notes: "Adds a new manufacturer",
     summary: "Add a new manufacturer",
     method: "POST",
-    type: "Manufacturer",
+    type: "ManufacturerController",
     parameters: [{
-      name: "Manufacturer",
-      description: "JSON object representing the Manufacturer to add",
+      name: "ManufacturerController",
+      description: "JSON object representing the ManufacturerController to add",
       required: true,
-      type: "Manufacturer",
+      type: "ManufacturerController",
       paramType: "body"
     }],
 
@@ -83,7 +83,7 @@ exports.updateManufacturer = {
     summary: "Update an existing manufacturer",
     method: "PUT",
     parameters: [
-      sw.pathParam("id", "Manufacturer ID to update", "string"),
+      sw.pathParam("id", "ManufacturerController ID to update", "string"),
       {
         name: "name",
         description: "New manufacturer name to use",
@@ -93,7 +93,7 @@ exports.updateManufacturer = {
       }
     ],
     responseMessages: [swe.invalid('input')],
-    type: "Manufacturer",
+    type: "ManufacturerController",
     nickname: "updateManufacturer"
   },
   'action': async (req, res) => {
@@ -114,10 +114,10 @@ exports.deleteManufacturer = {
     summary: "Delete an existing manufacturer",
     method: "DELETE",
     parameters: [
-      sw.pathParam("id", "Manufacturer ID to Manufacturer", "string"),
+      sw.pathParam("id", "ManufacturerController ID to ManufacturerController", "string"),
     ],
     responseMessages: [swe.invalid('input'), swe.notFound('manufacturer')],
-    // type : "Manufacturer",
+    // type : "ManufacturerController",
     nickname: "updateManufacturer"
   },
   'action': async (req, res) => {

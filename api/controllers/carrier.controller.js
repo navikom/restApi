@@ -1,6 +1,6 @@
 const sw = require('swagger-node-express'),
   swe = sw.errors;
-const Carrier = require('../../models/carrier.js');
+const Carrier = require('../../models/carrier.model.js');
 
 /**
  * getList
@@ -14,10 +14,10 @@ exports.getAllCarriers = {
     method: "GET",
     summary: "List all phone carriers",
     notes: "Returns a list of all phone carriers",
-    type: "Carrier",
+    type: "CarrierController",
     nickname: "getAllCarriers",
     produces: ["application/json"],
-    parameters: [],
+    parameters: [sw.headerParam("auth", "An authorization header", "string")],
     responseMessages: [swe.invalid('carriers'), swe.notFound('carriers')]
   },
   'action': async (req, res) => {
@@ -40,7 +40,7 @@ exports.getCarrierById = {
     method: "GET",
     summary: "Find carrier by ID",
     notes: "Returns a carrier based on ID",
-    type: "Carrier",
+    type: "CarrierController",
     nickname: "getCarrierById",
     produces: ["application/json"],
     parameters: [sw.pathParam("carrierId", "ID of the carrier to return", "string")],
@@ -68,11 +68,11 @@ exports.addCarrier = {
     summary: "Add a new carrier",
     method: "POST",
     parameters: [{
-      // sw.pathParam("Carrier name", "JSON object representing the carrier to add", "Carrier")
-      name: "Carrier name",
+      // sw.pathParam("CarrierController name", "JSON object representing the carrier to add", "CarrierController")
+      name: "CarrierController name",
       description: "JSON object representing the carrier to add",
       required: true,
-      type: "Carrier",
+      type: "CarrierController",
       paramType: "body"
     }],
     responseMessages: [swe.invalid('input')],
@@ -94,9 +94,9 @@ exports.updateCarrier = {
     notes: "Update an existing carrier",
     summary: "Update an existing carrier",
     method: "PUT",
-    //parameters : [sw.pathParam("Carrier ID", "Carrier ID to update", "Carrier"), sw.pathParam("Carrier name", "New carrier name", "Carrier")],
+    //parameters : [sw.pathParam("CarrierController ID", "CarrierController ID to update", "CarrierController"), sw.pathParam("CarrierController name", "New carrier name", "CarrierController")],
     parameters: [
-      sw.pathParam("id", "Carrier ID to update", "string"),
+      sw.pathParam("id", "CarrierController ID to update", "string"),
       {
         name: "name",
         description: "New carrier name to use",
@@ -126,9 +126,9 @@ exports.deleteCarrier = {
     notes: "Delete an existing carrier",
     summary: "Delete an existing carrier",
     method: "DELETE",
-    parameters: [sw.pathParam("carrierId", "Carrier ID to delete", "string")],
+    parameters: [sw.pathParam("carrierId", "CarrierController ID to delete", "string")],
     responseMessages: [swe.invalid('input'), swe.notFound('carrier')],
-    // type : "Carrier",
+    // type : "CarrierController",
     nickname: "deleteCarrier"
   },
   'action': async (req, res) => {

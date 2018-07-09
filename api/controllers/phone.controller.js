@@ -1,6 +1,6 @@
 const sw = require('swagger-node-express'),
   swe = sw.errors;
-const Phone = require('../../models/phone.js');
+const Phone = require('../../models/phone.model.js');
 
 exports.getAllPhones = {
   'spec': {
@@ -9,7 +9,7 @@ exports.getAllPhones = {
     method: "GET",
     summary: "List all phone models",
     notes: "Returns a list of all phone models",
-    type: "Phone",
+    type: "PhoneController",
     nickname: "getAllPhones",
     produces: ["application/json"],
     parameters: [],
@@ -32,7 +32,7 @@ exports.getPhoneById = {
     method: "GET",
     summary: "Find phone by ID",
     notes: "Returns a phone based on ID",
-    type: "Phone",
+    type: "PhoneController",
     nickname: "getPhoneById",
     produces: ["application/json"],
     parameters: [sw.pathParam("phoneId", "ID of the phone to return", "string")],
@@ -55,10 +55,10 @@ exports.addPhone = {
     summary: "Add a new phone",
     method: "POST",
     parameters: [{
-      name: "Phone",
-      description: "JSON object representing the Phone to add",
+      name: "PhoneController",
+      description: "JSON object representing the PhoneController to add",
       required: true,
-      type: "Phone",
+      type: "PhoneController",
       paramType: "body"
     }],
     responseMessages: [swe.invalid('input')],
@@ -84,7 +84,7 @@ exports.addPhones = {
       name: "Phones",
       description: "JSON object representing the Phones list to add",
       required: true,
-      type: "Phone",
+      type: "PhoneController",
       paramType: "body"
     }],
     responseMessages: [swe.invalid('input')],
@@ -120,17 +120,17 @@ exports.updatePhone = {
     summary: "Update an existing phone",
     method: "PUT",
     parameters: [
-      sw.pathParam("id", "Phone ID to update", "string"),
+      sw.pathParam("id", "PhoneController ID to update", "string"),
       {
         name: "name",
-        description: "New Phone name to use",
+        description: "New PhoneController name to use",
         required: true,
         type: "string",
         paramType: "body"
       }
     ],
     responseMessages: [swe.invalid('input')],
-    type: "Phone",
+    type: "PhoneController",
     nickname: "updatePhone"
   },
   'action': async (req, res) => {
@@ -151,7 +151,7 @@ exports.deletePhone = {
     summary: "Delete an existing phone",
     method: "DELETE",
     parameters: [
-      sw.pathParam("id", "Phone ID to delete", "string")
+      sw.pathParam("id", "PhoneController ID to delete", "string")
     ],
     responseMessages: [swe.invalid('input'), swe.notFound('phone')],
     nickname: "deletePhone"

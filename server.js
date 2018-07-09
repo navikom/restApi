@@ -25,6 +25,7 @@ const express = require("express"),
   url = require("url"),
   fs = require('fs'),
   color = require('colors'),
+  logger = require('morgan'),
   extras = require('express-extras'),
   api = require('./api'),
   util = require('util'),
@@ -33,6 +34,7 @@ const express = require("express"),
 const app = express(),
   swagger = require('swagger-node-express').createNew(app);
 
+app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
