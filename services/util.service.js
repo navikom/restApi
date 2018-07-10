@@ -19,15 +19,15 @@ exports.errorResponse = function(res, err, code) { // Error Web Response
 };
 
 exports.successResponse = function(res, data, code) { // Success Web Response
-  let send_data = { success: true };
+  let sendData = { success: true };
 
   if (typeof data === 'object') {
-    send_data = Object.assign(data, send_data);//merge the objects
+    sendData = Object.assign(data, sendData);//merge the objects
   }
 
   if (code !== undefined) res.statusCode = code;
 
-  return res.json(send_data)
+  return res.json(sendData)
 };
 
 exports.throwError = function(errMessage, log) {

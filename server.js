@@ -97,6 +97,7 @@ swagger
   .addGet(api.Phone.getPhoneById)
   .addGet(routePassport(api.Dashboard.dashboard))
   .addGet(api.User.getAllUsers)
+  .addGet(api.User.getUserById)
 
   .addPost(api.Carrier.addCarrier)
   .addPost(api.Manufacture.addManufacturer)
@@ -104,14 +105,17 @@ swagger
   .addPost(api.Phone.addPhones)
   .addPost(api.User.create)
   .addPost(api.User.login)
+  .addPost(api.User.assignWithCarrier)
 
   .addPut(api.Carrier.updateCarrier)
   .addPut(api.Manufacture.updateManufacturer)
   .addPut(api.Phone.updatePhone)
+  .addPut(api.User.updateUser)
 
   .addDelete(api.Carrier.deleteCarrier)
   .addDelete(api.Manufacture.deleteManufacturer)
-  .addDelete(api.Phone.deletePhone);
+  .addDelete(api.Phone.deletePhone)
+  .addDelete(api.User.deleteUser);
 
 // set api info
 swagger.setApiInfo({

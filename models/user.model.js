@@ -39,7 +39,8 @@ const UserSchema = new Schema({
     type: String,
     enum: ['User', 'Admin'],
     default: 'User'
-  }
+  },
+  carriers: [{type: Schema.ObjectId, ref: 'Carriers'}],
 });
 
 UserSchema.pre('save', async function(next) {

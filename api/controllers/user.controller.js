@@ -1,7 +1,8 @@
 const sw = require('swagger-node-express');
 const swe = sw.errors;
 const authService = require('../../services/auth.service');
-const Users = require('../../models/user.model');
+const User = require('../../models/user.model');
+const Carrier = require('../../models/carrier.model');
 
 const { to, errorResponse, successResponse } = require('../../services/util.service');
 
@@ -63,7 +64,7 @@ exports.getAllUsers = {
   },
   'action': async (req, res) => {
     try {
-      const users = await Users.model.find();
+      const users = await User.model.find();
       res.send(users);
     } catch (e) {
       res.status(404).send(e);
@@ -74,7 +75,7 @@ exports.getAllUsers = {
 exports.getUserById = {
   'spec': {
     description: "Operations about user",
-    path: "/user/{id}",
+    path: "/users/{id}",
     method: "GET",
     summary: "Find user by ID",
     notes: "Returns a user based on ID",
@@ -86,42 +87,18 @@ exports.getUserById = {
   },
   'action': async (req, res) => {
     try {
-      const user = await Users.model.findById(req.params.id);
-      res.send(user);
+      const user = await User.model.findById(req.params.id).populate('carriers');
+      // res.send(user);
+      return successResponse(res, { user });
     } catch (e) {
-      res.status(400).send(e);
+      return errorResponse(res, e, 400);
     }
   }
-};
-
-exports.update = async function(req, res) {
-  let err, user, data
-  user = req.user;
-  data = req.body;
-  user.set(data);
-
-  [err, user] = await to(user.save());
-  if (err) {
-    console.log(err, user);
-
-    if (err.message.includes('E11000')) {
-      if (err.message.includes('phone')) {
-        err = 'This phone number is already in use';
-      } else if (err.message.includes('email')) {
-        err = 'This email address is already in use';
-      } else {
-        err = 'Duplicate Key Entry';
-      }
-    }
-
-    return errorResponse(res, err);
-  }
-  return successResponse(res, { message: 'Updated User: ' + user.email });
 };
 
 exports.updateUser = {
   'spec': {
-    path: "/user/{id}",
+    path: "/users/{id}",
     notes: "Update an existing user",
     summary: "Update an existing user",
     method: "PUT",
@@ -166,29 +143,68 @@ exports.updateUser = {
   }
 };
 
-exports.remove = async function(req, res) {
-  let user, err;
-  user = req.user;
+exports.deleteUser = {
+  'spec': {
+    path: "/users/{id}",
+    notes: "Delete user",
+    summary: "Delete user",
+    method: "DELETE",
+    parameters: [
+      sw.pathParam("id", "User ID to UserController", "string"),
+    ],
+    responseMessages: [swe.invalid('input'), swe.notFound('user')],
+    nickname: "deleteUser"
+  },
+  'action': async function(req, res) {
+    let user, err;
+    user = req.user;
 
-  [err, user] = await to(user.destroy());
-  if (err) return errorResponse(res, 'error occured trying to delete user');
+    [err, user] = await to(user.destroy());
+    if (err) return errorResponse(res, 'error occured trying to delete user');
 
-  return successResponse(res, { message: 'Deleted User' }, 204);
+    return successResponse(res, { message: 'Deleted User' }, 204);
+  }
 };
 
+exports.assignWithCarrier = {
+  'spec': {
+    path: "/users/{id}/carrier",
+    notes: "Assign carrier with user",
+    summary: "Assign carrier with user",
+    method: "DELETE",
+    parameters: [
+      sw.pathParam("id", "User ID to UserController", "string"),
+      {
+        name: "carrierId",
+        description: "Carrier id to bind with user",
+        required: true,
+        type: "string",
+        paramType: "body",
+        produces: ["application/json", "string"],
+      },
+    ],
+    responseMessages: [swe.invalid('input'), swe.notFound('user')],
+    nickname: "assignWithCarrier"
+  },
+  'action': async function(req, res) {
+    try {
+      const user = await User.model.findById(req.params.id);
+      const carrier = await Carrier.model.findById(req.body.carrierId);
+      carrier.user = user;
+      await carrier.save();
+      user.carriers.push(carrier);
+      await user.save();
+    } catch (e) {
+      return errorResponse(res, e, 400);
+    }
 
-// exports.login = async function(req, res) {
-//   let err, user;
-//
-//   [err, user] = await to(authService.authUser(req.body));
-//   if (err) return errorResponse(res, err, 422);
-//
-//   return successResponse(res, { token: user.getJWT(), user: user.toWeb() });
-// };
+    return successResponse(res, { message: `Carrier ${req.body.carrierId} saved to user ${req.params.id}` }, 200);
+  }
+};
 
 exports.login = {
   'spec': {
-    path: "/user/login",
+    path: "/users/login",
     notes: "Login user",
     summary: "Login user",
     method: "POST",

@@ -28,6 +28,7 @@ exports.swaggerPassport = function(passport) {
       if (err) {
         return errorResponse(res, err, 422);
       }
+      req.user = user.toWeb();
       controller.action(req, res, next);
     };
     return { spec: controller.spec, action };

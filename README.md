@@ -1,4 +1,4 @@
-*NodeJS, Express, MongoDB, Swagger, Passport, JWT starter kit*
+*NodeJS, Express, MongoDB, Swagger, Passport, JWT*
 
 ### What is this
 

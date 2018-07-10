@@ -48,7 +48,7 @@ exports.getCarrierById = {
   },
   'action': async (req, res) => {
     try {
-      const carrier = await Carrier.model.findById(req.params.carrierId);
+      const carrier = await Carrier.model.findById(req.params.carrierId).populate('user');
       res.send(carrier);
     } catch (e) {
       res.status(400).send(e);

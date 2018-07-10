@@ -23,7 +23,7 @@ exports.dashboard = {
   'action': async (req, res, next) => {
     const user = req.user;
     try {
-      res.send({success: true, data: 'User data'});
+      res.send({ success: true, data: `User id: ${user.id}` });
     } catch (e) {
       res.status(404).send(e);
     }
