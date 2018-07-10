@@ -1,7 +1,7 @@
 const { ExtractJwt, Strategy } = require('passport-jwt');
 const User = require('../models/user.model');
 const CONFIG = require('../config/config');
-const { to, passportService, ReE } = require('../services/util.service');
+const { to, passportService, errorResponse } = require('../services/util.service');
 
 exports.passportStrategy = function(passport) {
   const opts = {};
@@ -20,13 +20,13 @@ exports.passportStrategy = function(passport) {
   }));
 };
 
-exports.passportForRoute = function(passport) {
+exports.swaggerPassport = function(passport) {
   const applyPassport = passportService(passport);
   return function(controller) {
     const action = async (req, res, next) => {
       const [err, user] = await applyPassport(req, res, next);
       if (err) {
-        return ReE(res, err, 422);
+        return errorResponse(res, err, 422);
       }
       controller.action(req, res, next);
     };

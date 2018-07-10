@@ -1,6 +1,6 @@
 const User = require('../models/user.model');
 const validator = require('validator');
-const { to, TE } = require('../services/util.service');
+const { to, throwError } = require('../services/util.service');
 
 const getUniqueKeyFromBody = function(body) {// this is so they can send in 3 options unique_key, email, or phone and it will work
   let uniqueKey = body.unique_key;
@@ -25,14 +25,14 @@ exports.createUser = async function(userInfo) {
   authInfo.status = 'create';
 
   uniqueKey = getUniqueKeyFromBody(userInfo);
-  if (!uniqueKey) TE('An email or phone number was not entered.');
+  if (!uniqueKey) throwError('An email or phone number was not entered.');
 
   if (validator.isEmail(uniqueKey)) {
     authInfo.method = 'email';
     userInfo.email = uniqueKey;
 
     [err, user] = await to(User.model.create(userInfo));
-    if (err) TE(err.message || 'user already exists with that email');
+    if (err) throwError(err.message || 'user already exists with that email');
 
     return user;
 
@@ -41,11 +41,11 @@ exports.createUser = async function(userInfo) {
     userInfo.phone = uniqueKey;
 
     [err, user] = await to(User.model.create(userInfo));
-    if (err) TE(err.message || 'user already exists with that phone number');
+    if (err) throwError(err.message || 'user already exists with that phone number');
 
     return user;
   } else {
-    TE('A valid email or phone number was not entered.');
+    throwError('A valid email or phone number was not entered.');
   }
 };
 
@@ -55,33 +55,33 @@ exports.authUser = async function(userInfo) {//returns token
   authInfo.status = 'login';
   uniqueKey = getUniqueKeyFromBody(userInfo);
 
-  if (!uniqueKey) TE('Please enter an email or phone number to login');
+  if (!uniqueKey) throwError('Please enter an email or phone number to login');
 
 
-  if (!userInfo.password) TE('Please enter a password to login');
+  if (!userInfo.password) throwError('Please enter a password to login');
 
   let user;
   if (validator.isEmail(uniqueKey)) {
     authInfo.method = 'email';
 
     [err, user] = await to(User.model.findOne({ email: uniqueKey }));
-    if (err) TE(err.message);
+    if (err) throwError(err.message);
 
   } else if (validator.isMobilePhone(uniqueKey, 'any')) {//checks if only phone number was sent
     authInfo.method = 'phone';
 
     [err, user] = await to(User.model.findOne({ phone: uniqueKey }));
-    if (err) TE(err.message);
+    if (err) throwError(err.message);
 
   } else {
-    TE('A valid email or phone number was not entered');
+    throwError('A valid email or phone number was not entered');
   }
 
-  if (!user) TE('Not registered');
+  if (!user) throwError('Not registered');
 
   [err, user] = await to(user.comparePassword(userInfo.password));
 
-  if (err) TE(err.message);
+  if (err) throwError(err.message);
 
   return user;
 

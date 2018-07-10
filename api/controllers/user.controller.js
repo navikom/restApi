@@ -3,7 +3,7 @@ const swe = sw.errors;
 const authService = require('../../services/auth.service');
 const Users = require('../../models/user.model');
 
-const { to, ReE, ReS } = require('../../services/util.service');
+const { to, errorResponse, successResponse } = require('../../services/util.service');
 
 //{"phone": "88888888", "password":"123456"}
 exports.create = {
@@ -26,18 +26,18 @@ exports.create = {
     const body = req.body;
     res.setHeader('Content-Type', 'application/json');
     if (!body.email && !body.phone) {
-      return ReE(res, 'Please enter an email or phone number to register.');
+      return errorResponse(res, 'Please enter an email or phone number to register.');
     } else if (!body.password) {
-      return ReE(res, 'Please enter a password to register.');
+      return errorResponse(res, 'Please enter a password to register.');
     } else {
       let err, user;
 
       [err, user] = await to(authService.createUser(body));
 
       if (err) {
-        return ReE(res, err, 422);
+        return errorResponse(res, err, 422);
       }
-      return ReS(res, { message: 'Successfully created new user.', user: user.toWeb(), token: user.getJWT() }, 201);
+      return successResponse(res, { message: 'Successfully created new user.', user: user.toWeb(), token: user.getJWT() }, 201);
     }
   }
 };
@@ -45,7 +45,7 @@ exports.create = {
 exports.get = async function(req, res) {
   let user = req.user;
 
-  return ReS(res, { user: user.toWeb() });
+  return successResponse(res, { user: user.toWeb() });
 };
 
 exports.getAllUsers = {
@@ -114,9 +114,9 @@ exports.update = async function(req, res) {
       }
     }
 
-    return ReE(res, err);
+    return errorResponse(res, err);
   }
-  return ReS(res, { message: 'Updated User: ' + user.email });
+  return successResponse(res, { message: 'Updated User: ' + user.email });
 };
 
 exports.updateUser = {
@@ -160,9 +160,9 @@ exports.updateUser = {
         }
       }
 
-      return ReE(res, err);
+      return errorResponse(res, err);
     }
-    return ReS(res, { message: 'Updated User: ' + user.email });
+    return successResponse(res, { message: 'Updated User: ' + user.email });
   }
 };
 
@@ -171,9 +171,9 @@ exports.remove = async function(req, res) {
   user = req.user;
 
   [err, user] = await to(user.destroy());
-  if (err) return ReE(res, 'error occured trying to delete user');
+  if (err) return errorResponse(res, 'error occured trying to delete user');
 
-  return ReS(res, { message: 'Deleted User' }, 204);
+  return successResponse(res, { message: 'Deleted User' }, 204);
 };
 
 
@@ -181,9 +181,9 @@ exports.remove = async function(req, res) {
 //   let err, user;
 //
 //   [err, user] = await to(authService.authUser(req.body));
-//   if (err) return ReE(res, err, 422);
+//   if (err) return errorResponse(res, err, 422);
 //
-//   return ReS(res, { token: user.getJWT(), user: user.toWeb() });
+//   return successResponse(res, { token: user.getJWT(), user: user.toWeb() });
 // };
 
 exports.login = {
@@ -209,8 +209,8 @@ exports.login = {
     let err, user;
 
     [err, user] = await to(authService.authUser(req.body));
-    if (err) return ReE(res, err, 422);
+    if (err) return errorResponse(res, err, 422);
 
-    return ReS(res, { token: user.getJWT(), user: user.toWeb() });
+    return successResponse(res, { token: user.getJWT(), user: user.toWeb() });
   }
 };

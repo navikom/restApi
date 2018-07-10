@@ -8,7 +8,7 @@ exports.to = async (promise) => {
   return [null, res];
 };
 
-exports.ReE = function(res, err, code) { // Error Web Response
+exports.errorResponse = function(res, err, code) { // Error Web Response
   if (typeof err === 'object' && typeof err.message !== 'undefined') {
     err = err.message;
   }
@@ -18,7 +18,7 @@ exports.ReE = function(res, err, code) { // Error Web Response
   return res.json({ success: false, error: err });
 };
 
-exports.ReS = function(res, data, code) { // Success Web Response
+exports.successResponse = function(res, data, code) { // Success Web Response
   let send_data = { success: true };
 
   if (typeof data === 'object') {
@@ -30,25 +30,27 @@ exports.ReS = function(res, data, code) { // Success Web Response
   return res.json(send_data)
 };
 
-exports.TE = function(err_message, log) { // TE stands for Throw Error
+exports.throwError = function(errMessage, log) {
   if (log === true) {
-    console.error(err_message);
+    console.error(errMessage);
   }
 
-  throw new Error(err_message);
+  throw new Error(errMessage);
 };
 
 exports.passportService = function(passport) {
   return async (req, res, next) => {
-    const user = await to(new Promise((resolve, reject) => {
-      passport.authenticate('jwt', function(err, user, info) {
-        if(!user) {
-          reject(info);
-        } else {
-          resolve(user);
-        }
-      })(req, res, next);
-    }));
+    const user = await to(
+      new Promise((resolve, reject) => {
+        passport.authenticate('jwt', function(err, user, info) {
+          if (!user) {
+            reject(info);
+          } else {
+            resolve(user);
+          }
+        })(req, res, next);
+      })
+    );
     return user;
   }
 };

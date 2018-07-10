@@ -43,9 +43,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(passport.initialize());
 
-const { passportStrategy, passportForRoute } = require('./middleware/passport');
+const { passportStrategy, swaggerPassport } = require('./middleware/passport');
 passportStrategy(passport);
-const passportSupplier = passportForRoute(passport);
+const routePassport = swaggerPassport(passport);
 
 // Setup throttling to keep users from abusing the API
 app.use(extras.throttle({
@@ -95,7 +95,8 @@ swagger
   .addGet(api.Carrier.getCarrierById)
   .addGet(api.Manufacture.getManufacturerById)
   .addGet(api.Phone.getPhoneById)
-  .addGet(passportSupplier(api.Dashboard.dashboard))
+  .addGet(routePassport(api.Dashboard.dashboard))
+  .addGet(api.User.getAllUsers)
 
   .addPost(api.Carrier.addCarrier)
   .addPost(api.Manufacture.addManufacturer)
